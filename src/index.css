@@ -1,0 +1,86 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+/* BPMN Customization */
+.djs-palette {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 8px !important;
+}
+
+/* BPMN Dark Mode */
+.dark .djs-container svg {
+  filter: invert(90%) hue-rotate(180deg);
+}
+
+.dark .djs-palette {
+  background: #1f2937 !important;
+  /* gray-800 */
+  border: 1px solid #374151 !important;
+  /* gray-700 */
+}
+
+.dark .djs-palette .entry {
+  color: #e5e7eb !important;
+  /* gray-200 */
+}
+
+.dark .djs-palette .entry:hover {
+  color: #60a5fa !important;
+  /* blue-400 */
+  background-color: #374151 !important;
+}
+
+/* Context Pad Dark Mode */
+/* Context Pad Dark Mode */
+.dark .djs-context-pad {
+  background: transparent !important;
+  border: none !important;
+}
+
+.dark .djs-context-pad .entry {
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  opacity: 0.8;
+  transition: opacity 0.2s, background-color 0.2s;
+}
+
+.dark .djs-context-pad .entry:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  color: #60a5fa !important;
+  opacity: 1;
+}
+
+/* Popup Menu Dark Mode */
+.dark .djs-popup {
+  background: #1f2937 !important;
+  border: 1px solid #374151 !important;
+  color: #e5e7eb !important;
+}
+
+.dark .djs-popup .entry:hover {
+  background-color: #374151 !important;
+  border-color: #4b5563 !important;
+}
+
+.dark .djs-popup-header {
+  border-bottom: 1px solid #374151 !important;
+}
+
+.dark .djs-popup-body .entry .label {
+  color: #e5e7eb !important;
+}
+
+.dark .djs-popup-body .entry.active {
+  background-color: #374151 !important;
+}
