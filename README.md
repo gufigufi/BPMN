@@ -1,73 +1,67 @@
-# React + TypeScript + Vite
+# BPMN Editor Pro 🚀🎨
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Сучасний редактор бізнес-процесів з розширеними можливостями візуалізації, автоматичним розфарбовуванням відділів та інтеграцією з Notion.
 
-Currently, two official plugins are available:
+## Основні можливості
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **BPMN 2.0 Modeler**: Повноцінний редактор з підтримкою всіх стандартних елементів.
+- **Advanced Coloring**: 
+  - Ручне фарбування елементів пресетними кольорами.
+  - Власний HEX-пікер для вибору будь-якого кольору.
+  - Система «Улюблених кольорів» з автозбереженням.
+- **Department Auto-Coloring**: Кнопка «Затвердити» автоматично розфарбовує доріжки (Lanes) та завдання за назвою відділу (IT, PR, HR, Sales тощо).
+- **Typography Support**: Перемикач світлого/темного тексту всередині блоків для кращої читабельності.
+- **Smart Data Table**: Інтерактивний реєстр завдань з можливістю фокусування на елементі схеми.
+- **Dark Mode**: Стильна темна тема з автоматичним підлаштуванням шрифтів.
+- **Export/Import**: Підтримка XML, SVG завантаження та розгортання в Notion.
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🛠 Запуск локально (Development)
 
-## Expanding the ESLint configuration
+1. **Встановіть залежності**:
+   ```bash
+   npm install
+   ```
+2. **Запустіть сервер розробки**:
+   ```bash
+   npm run dev
+   ```
+   *Відкрийте http://localhost:5173 у браузері.*
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+3. **Зберіть проект для продакшну**:
+   ```bash
+   npm run build
+   ```
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## 🐳 Запуск через Docker (Production)
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Для швидкого розгортання використовуйте Docker та Docker Compose. Проект буде доступний на порту **8080**.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+1. **Зберіть та запустіть контейнер**:
+   ```bash
+   docker-compose up -d --build
+   ```
+2. **Перевірте результат**: 
+   Відкрийте [http://localhost:8080](http://localhost:8080)
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+3. **Зупинити проект**:
+   ```bash
+   docker-compose down
+   ```
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+---
+
+## 🏗 Технології
+
+- **React 19 + TypeScript + Vite**
+- **bpmn-js**: Ядро моделювання процесів.
+- **Tailwind CSS**: Сучасний та гнучкий інтерфейс.
+- **Lucide React**: Набір преміальних іконок.
+- **Nginx**: Для швидкої віддачі статики в Docker.
+
+---
+
+Розроблено з любов'ю ❤️ для зручної роботи з бізнес-процесами.
