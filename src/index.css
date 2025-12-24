@@ -17,109 +17,113 @@ body,
   border-radius: 8px !important;
 }
 
-/* BPMN Dark Mode */
-/* BPMN Dark Mode Manual Overrides */
-.dark .djs-container {
-  background-color: rgb(31 41 55) !important;
-  /* gray-800 */
+/* --- LIGHT MODE DEFAULTS --- */
+.djs-visual rect,
+.djs-visual circle,
+.djs-visual polygon {
+  fill: #ffffff;
+  stroke: #111827;
 }
 
-/* Shapes: Dark Fill, White Outline */
+/* --- DARK MODE DEFAULTS (Container) --- */
+.dark .djs-container {
+  background-color: #0f172a !important;
+  /* Slate 900 */
+}
+
+/* 1. SHAPE COLORS IN DARK MODE */
+/* Forces uncolored elements to dark background using !important */
 .dark .djs-visual rect,
 .dark .djs-visual circle,
 .dark .djs-visual polygon,
 .dark .djs-visual path {
-  stroke: #e5e7eb !important;
-  /* gray-200 */
   fill: rgb(31 41 55) !important;
-  /* Match background */
+  /* Original Gray 800 */
+  stroke: #475569 !important;
+  /* Slate 600 */
 }
 
-/* Text: White */
-.dark .djs-visual text,
+/* Allow manual coloring to override the default dark fill */
+.dark .djs-visual[style*="fill"] rect,
+.dark .djs-visual[style*="fill"] circle,
+.dark .djs-visual[style*="fill"] polygon,
+.dark .djs-visual[style*="fill"] path {
+  fill: inherit !important;
+  stroke: inherit !important;
+}
+
+/* 2. TEXT COLORS (LIGHT/DARK DEFAULTS) */
+.djs-container text,
+.djs-label {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  fill: #111827 !important;
+  /* Default for Light Mode */
+}
+
+.dark .djs-container text,
 .dark .djs-label {
-  fill: #f3f4f6 !important;
-  /* gray-100 */
+  fill: #ffffff !important;
+  /* Default for Dark Mode */
 }
 
-/* Connections: White */
-.dark .djs-connection path {
-  stroke: #e5e7eb !important;
+/* 3. T-TOGGLE OVERRIDES (MARKERS) */
+.label-light text,
+.label-light .djs-label {
+  fill: #ffffff !important;
 }
 
-/* Markers (Arrowheads): White */
+.label-dark text,
+.label-dark .djs-label {
+  fill: #111827 !important;
+}
+
+/* Connections & Markers in Dark Mode */
+.dark .djs-connection:not([style*="stroke"]) path {
+  stroke: #64748b !important;
+}
+
 .dark marker path {
-  fill: #e5e7eb !important;
-  stroke: #e5e7eb !important;
+  fill: #64748b !important;
+  stroke: #64748b !important;
 }
 
+/* UI Components (Palette, Context Pad, Popups) */
 .dark .djs-palette {
-  background: #1f2937 !important;
-  /* gray-800 */
-  border: 1px solid #374151 !important;
-  /* gray-700 */
+  background: #1e293b !important;
+  border: 1px solid #334155 !important;
 }
 
 .dark .djs-palette .entry {
-  color: #e5e7eb !important;
-  /* gray-200 */
+  color: #94a3b8 !important;
 }
 
 .dark .djs-palette .entry:hover {
-  color: #60a5fa !important;
-  /* blue-400 */
-  background-color: #374151 !important;
+  color: #3b82f6 !important;
+  background-color: #334155 !important;
 }
 
-/* Context Pad Dark Mode */
-/* Context Pad Dark Mode */
-/* Context Pad Dark Mode */
 .dark .djs-context-pad {
-  background-color: rgb(31 41 55) !important;
-  /* gray-800 */
-  border: 1px solid #4b5563 !important;
-  /* gray-600 */
-  border-radius: 4px !important;
-  padding: 2px !important;
-  width: 120px !important;
-  /* Ensure 3 items per row */
-}
-
-.dark .djs-context-pad .entry {
-  background-color: rgb(31 41 55) !important;
-  color: #ffffff !important;
-  /* White icons */
-  font-weight: bold !important;
-  transition: opacity 0.2s, background-color 0.2s;
+  background-color: #1e293b !important;
+  border: 1px solid #334155 !important;
+  border-radius: 8px !important;
 }
 
 .dark .djs-context-pad .entry:hover {
-  background-color: #374151 !important;
-  /* gray-700 */
-  color: #60a5fa !important;
-  /* blue-400 */
+  background-color: #334155 !important;
 }
 
-/* Popup Menu Dark Mode */
 .dark .djs-popup {
-  background: #1f2937 !important;
-  border: 1px solid #374151 !important;
-  color: #e5e7eb !important;
-}
-
-.dark .djs-popup .entry:hover {
-  background-color: #374151 !important;
-  border-color: #4b5563 !important;
+  background: #1e293b !important;
+  border: 1px solid #334155 !important;
+  color: #f1f5f9 !important;
 }
 
 .dark .djs-popup-header {
-  border-bottom: 1px solid #374151 !important;
+  border-bottom: 1px solid #334155 !important;
 }
 
-.dark .djs-popup-body .entry .label {
-  color: #e5e7eb !important;
-}
-
-.dark .djs-popup-body .entry.active {
-  background-color: #374151 !important;
+.dark .djs-popup-body .entry:hover {
+  background-color: #334155 !important;
 }

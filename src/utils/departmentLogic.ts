@@ -1,5 +1,17 @@
 import BpmnModeler from 'bpmn-js/lib/Modeler';
 
+// Map of modern colors for departments
+export const DEPT_COLORS: Record<string, { fill: string; stroke: string }> = {
+    'IT': { fill: '#dbeafe', stroke: '#1d4ed8' },
+    'PR': { fill: '#fce7f3', stroke: '#be185d' },
+    'HR': { fill: '#dcfce7', stroke: '#15803d' },
+    'Sales': { fill: '#ffedd5', stroke: '#c2410c' },
+    'Finance': { fill: '#f3e8ff', stroke: '#6d28d9' },
+    'Legal': { fill: '#fee2e2', stroke: '#b91c1c' },
+    'Marketing': { fill: '#f5f5f4', stroke: '#44403c' },
+    'Default': { fill: '#f8fafc', stroke: '#475569' }
+};
+
 export function autoAssignDepartments(modeler: BpmnModeler) {
     const elementRegistry = modeler.get('elementRegistry') as any;
     const modeling = modeler.get('modeling') as any;
@@ -8,6 +20,16 @@ export function autoAssignDepartments(modeler: BpmnModeler) {
     const lanes = elementRegistry.filter((e: any) => e.type === 'bpmn:Lane');
 
     let count = 0;
+
+    // First, color the lanes themselves based on their names
+    lanes.forEach((lane: any) => {
+        const name = lane.businessObject.name || '';
+        const color = DEPT_COLORS[name] || DEPT_COLORS['Default'];
+        modeling.setColor(lane, {
+            fill: color.fill,
+            stroke: color.stroke
+        });
+    });
 
     elements.forEach((shape: any) => {
         // Skip non-flow nodes
@@ -45,6 +67,14 @@ export function autoAssignDepartments(modeler: BpmnModeler) {
                     'custom:dept_id': deptId
                 });
                 shape.businessObject.dept_id = deptId;
+
+                // Also color the element based on the department
+                const color = DEPT_COLORS[deptId] || DEPT_COLORS['Default'];
+                modeling.setColor(shape, {
+                    fill: color.fill,
+                    stroke: color.stroke
+                });
+
                 count++;
             }
         } else {
@@ -59,6 +89,5 @@ export function autoAssignDepartments(modeler: BpmnModeler) {
         }
     });
 
-    console.log(`[AutoAssign] Updated ${count} elements.`);
     return count;
 }
