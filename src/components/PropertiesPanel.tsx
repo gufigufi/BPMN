@@ -1,20 +1,24 @@
 import { useEffect, useState } from 'react';
+// @ts-ignore
 import BpmnModeler from 'bpmn-js/lib/Modeler';
+import type { StatusOption } from '../hooks/useCustomStatuses';
 
 interface PropertiesPanelProps {
     modeler: BpmnModeler | null;
+    statuses?: StatusOption[];
 }
 
-export function PropertiesPanel({ modeler }: PropertiesPanelProps) {
+export function PropertiesPanel({ modeler, statuses = [] }: PropertiesPanelProps) {
     const [selectedElement, setSelectedElement] = useState<any>(null);
     const [formData, setFormData] = useState({
         name: '',
         documentation: '',
         inputData: '',
         outputData: '',
-        clickupStatus: '',
-        clickupAssignee: '',
-        clickupPriority: '',
+        notionStatus: '',
+        notionAssignee: '',
+        notionPriority: '',
+        notionDueDate: '',
         gatewayCondition: '', // For Gateways
         dept_id: '' // Read-only mostly, but display it
     });
@@ -36,9 +40,10 @@ export function PropertiesPanel({ modeler }: PropertiesPanelProps) {
                     documentation: bo.documentation && bo.documentation[0] ? bo.documentation[0].text : '',
                     inputData: bo.get('custom:inputData') || '',
                     outputData: bo.get('custom:outputData') || '',
-                    clickupStatus: bo.get('custom:clickupStatus') || '',
-                    clickupAssignee: bo.get('custom:clickupAssignee') || '',
-                    clickupPriority: bo.get('custom:clickupPriority') || '',
+                    notionStatus: bo.get('custom:notionStatus') || '',
+                    notionAssignee: bo.get('custom:notionAssignee') || '',
+                    notionPriority: bo.get('custom:notionPriority') || '',
+                    notionDueDate: bo.get('custom:notionDueDate') || '',
                     gatewayCondition: bo.get('custom:gatewayCondition') || '',
                     dept_id: bo.dept_id || bo.get('custom:dept_id') || ''
                 });
@@ -85,12 +90,7 @@ export function PropertiesPanel({ modeler }: PropertiesPanelProps) {
                 documentation: value ? [{ text: value }] : undefined
             });
         } else {
-            // Custom attributes: Need to ensure `custom` namespace is handled or just use loose properties if using standard moddle
-            // Since we didn't setup a full custom moddle, we might rely on the fact that JS objects hold the data at runtime,
-            // but strictly speaking for XML export, we need a moddle extension.
-            // For this prototype, we will just update the property directly on the businessObject.
-            // `modeling.updateProperties` handles simple properties.
-
+            // Custom attributes
             const updateData: any = {};
             updateData[`custom:${field}`] = value;
             modeling.updateProperties(selectedElement, updateData);
@@ -159,7 +159,7 @@ export function PropertiesPanel({ modeler }: PropertiesPanelProps) {
                         <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Вхідні дані (Input)</label>
                         <input
                             type="text"
-                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 border-l-4 border-l-green-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 border-l-4 border-l-green-500 dark:border-l-green-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                             value={formData.inputData}
                             onChange={(e) => handleChange('inputData', e.target.value)}
                         />
@@ -168,7 +168,7 @@ export function PropertiesPanel({ modeler }: PropertiesPanelProps) {
                         <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Вихідні дані (Output)</label>
                         <input
                             type="text"
-                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 border-l-4 border-l-red-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 border-l-4 border-l-red-500 dark:border-l-red-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                             value={formData.outputData}
                             onChange={(e) => handleChange('outputData', e.target.value)}
                         />
@@ -178,22 +178,32 @@ export function PropertiesPanel({ modeler }: PropertiesPanelProps) {
                 {!isGateway && (
                     <>
                         <div className="h-px bg-gray-200 dark:bg-gray-700 my-2"></div>
-                        <h3 className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">ClickUp Інтеграція</h3>
+                        <h3 className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Notion Інтеграція</h3>
 
                         {/* Status */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Статус</label>
                             <select
                                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                                value={formData.clickupStatus}
-                                onChange={(e) => handleChange('clickupStatus', e.target.value)}
+                                value={formData.notionStatus}
+                                onChange={(e) => handleChange('notionStatus', e.target.value)}
                             >
                                 <option value="">Не вибрано</option>
-                                <option value="to_do">To Do</option>
-                                <option value="in_progress">In Progress</option>
-                                <option value="review">Review</option>
-                                <option value="complete">Complete</option>
+                                {statuses.map(s => (
+                                    <option key={s.id} value={s.label}>{s.label}</option>
+                                ))}
                             </select>
+                        </div>
+
+                        {/* Due Date */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Дата виконання</label>
+                            <input
+                                type="date"
+                                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                value={formData.notionDueDate}
+                                onChange={(e) => handleChange('notionDueDate', e.target.value)}
+                            />
                         </div>
 
                         {/* Assignee */}
@@ -202,9 +212,9 @@ export function PropertiesPanel({ modeler }: PropertiesPanelProps) {
                             <input
                                 type="text"
                                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                                value={formData.clickupAssignee}
-                                onChange={(e) => handleChange('clickupAssignee', e.target.value)}
-                                placeholder="email@example.com"
+                                value={formData.notionAssignee}
+                                onChange={(e) => handleChange('notionAssignee', e.target.value)}
+                                placeholder="Ім'я виконавця"
                             />
                         </div>
 
@@ -213,14 +223,13 @@ export function PropertiesPanel({ modeler }: PropertiesPanelProps) {
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Пріоритет</label>
                             <select
                                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                                value={formData.clickupPriority}
-                                onChange={(e) => handleChange('clickupPriority', e.target.value)}
+                                value={formData.notionPriority}
+                                onChange={(e) => handleChange('notionPriority', e.target.value)}
                             >
                                 <option value="">Не вибрано</option>
-                                <option value="urgent">Urgent</option>
-                                <option value="high">High</option>
-                                <option value="normal">Normal</option>
-                                <option value="low">Low</option>
+                                <option value="High">High</option>
+                                <option value="Medium">Medium</option>
+                                <option value="Low">Low</option>
                             </select>
                         </div>
                     </>

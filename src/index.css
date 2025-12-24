@@ -18,8 +18,39 @@ body,
 }
 
 /* BPMN Dark Mode */
-.dark .djs-container svg {
-  filter: invert(90%) hue-rotate(180deg);
+/* BPMN Dark Mode Manual Overrides */
+.dark .djs-container {
+  background-color: rgb(31 41 55) !important;
+  /* gray-800 */
+}
+
+/* Shapes: Dark Fill, White Outline */
+.dark .djs-visual rect,
+.dark .djs-visual circle,
+.dark .djs-visual polygon,
+.dark .djs-visual path {
+  stroke: #e5e7eb !important;
+  /* gray-200 */
+  fill: rgb(31 41 55) !important;
+  /* Match background */
+}
+
+/* Text: White */
+.dark .djs-visual text,
+.dark .djs-label {
+  fill: #f3f4f6 !important;
+  /* gray-100 */
+}
+
+/* Connections: White */
+.dark .djs-connection path {
+  stroke: #e5e7eb !important;
+}
+
+/* Markers (Arrowheads): White */
+.dark marker path {
+  fill: #e5e7eb !important;
+  stroke: #e5e7eb !important;
 }
 
 .dark .djs-palette {
@@ -42,23 +73,31 @@ body,
 
 /* Context Pad Dark Mode */
 /* Context Pad Dark Mode */
+/* Context Pad Dark Mode */
 .dark .djs-context-pad {
-  background: transparent !important;
-  border: none !important;
+  background-color: rgb(31 41 55) !important;
+  /* gray-800 */
+  border: 1px solid #4b5563 !important;
+  /* gray-600 */
+  border-radius: 4px !important;
+  padding: 2px !important;
+  width: 120px !important;
+  /* Ensure 3 items per row */
 }
 
 .dark .djs-context-pad .entry {
-  background-color: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  opacity: 0.8;
+  background-color: rgb(31 41 55) !important;
+  color: #ffffff !important;
+  /* White icons */
+  font-weight: bold !important;
   transition: opacity 0.2s, background-color 0.2s;
 }
 
 .dark .djs-context-pad .entry:hover {
-  background-color: rgba(255, 255, 255, 0.1) !important;
+  background-color: #374151 !important;
+  /* gray-700 */
   color: #60a5fa !important;
-  opacity: 1;
+  /* blue-400 */
 }
 
 /* Popup Menu Dark Mode */

@@ -1,80 +1,74 @@
 import BpmnModeler from 'bpmn-js/lib/Modeler';
 
-export function exportToClickUpJson(modeler: BpmnModeler) {
+export function exportToNotionCSV(modeler: BpmnModeler) {
     const elementRegistry = modeler.get('elementRegistry');
 
-    // 1. Find the Process Name (Folder) -> usually the Participant Name or Process Name
-    // We'll try to find a Participant first
+    // Get Process Name
     // @ts-ignore
     const participant = elementRegistry.filter((e: any) => e.type === 'bpmn:Participant')[0];
-    const processName = participant ? participant.businessObject.name : 'Business Process';
+    const processName = participant ? participant.businessObject.name : 'BPMN Process';
+    const safeProcessName = processName.replace(/[^a-z0-9а-яіїєґ ]/gi, '_');
 
-    // 2. Find Lanes (Lists)
     // @ts-ignore
-    const lanes = elementRegistry.filter((e: any) => e.type === 'bpmn:Lane');
+    const elements = elementRegistry.filter((e: any) =>
+        e.type.includes('Task') || e.type.includes('Event')
+    );
 
-    const folder = {
-        name: processName,
-        lists: [] as any[]
-    };
+    // CSV Headers
+    // Notion auto-detects headers. 'Name' acts as the Title property.
+    const headers = ['Name', 'Department', 'Status', 'Assignee', 'Priority', 'Due Date', 'Content'];
+    const rows = [headers.join(',')];
 
-    if (lanes.length > 0) {
-        lanes.forEach((lane: any) => {
-            const listName = lane.businessObject.name || lane.id;
-            const listContent = {
-                name: listName,
-                tasks: [] as any[]
-            };
+    elements.forEach((e: any) => {
+        const bo = e.businessObject;
 
-            // Find tasks in this Lane
-            // We can use our dept_id logic or the flowNodeRef
-            // Using flowNodeRef is safer for what is currently in the lane according to BPMN
-            const refs = lane.businessObject.flowNodeRef || [];
+        const inputData = bo.get('custom:inputData') || '';
+        const outputData = bo.get('custom:outputData') || '';
+        const description = (bo.documentation && bo.documentation[0] ? bo.documentation[0].text : '');
 
-            refs.forEach((nodeBo: any) => {
-                // We need to look up the shape to get custom properties easily if they are not fully on BO (they are on BO usually)
-                // But custom properties are on BO.
+        // Construct Body Content with Visual Separation (Pseudo-formatting for Plain Text)
+        const contentLines = [];
+        if (description) contentLines.push(`=== ОПИС ПРОЦЕСУ ===\n${description}`);
+        if (inputData) contentLines.push(`=== ВХІДНІ ДАНІ ===\n${inputData}`);
+        if (outputData) contentLines.push(`=== ВИХІДНІ ДАНІ ===\n${outputData}`);
 
-                // Filter for Tasks only
-                if (!nodeBo.$type.includes('Task') && !nodeBo.$type.includes('Event')) return;
+        const bodyContent = contentLines.join('\n\n');
 
-                const task = {
-                    name: nodeBo.name || 'Untitled Task',
-                    description: (nodeBo.documentation && nodeBo.documentation[0] ? nodeBo.documentation[0].text : ''),
-                    status: nodeBo.get('custom:clickupStatus') || 'open',
-                    assignee: nodeBo.get('custom:clickupAssignee') || null,
-                    priority: nodeBo.get('custom:clickupPriority') || null,
-                    custom_fields: {
-                        input: nodeBo.get('custom:inputData'),
-                        output: nodeBo.get('custom:outputData'),
-                        dept_id: nodeBo.get('custom:dept_id') || lane.businessObject.name
-                    }
-                };
-                listContent.tasks.push(task);
-            });
+        const rowData = [
+            bo.name || 'Untitled Task',
+            bo.dept_id || bo.get('custom:dept_id') || 'General',
+            bo.get('custom:notionStatus') || 'Not Started',
+            bo.get('custom:notionAssignee') || '',
+            bo.get('custom:notionPriority') || 'Medium',
+            bo.get('custom:notionDueDate') || '',
+            bodyContent
+        ];
 
-            folder.lists.push(listContent);
+        // Escape CSV values
+        const csvRow = rowData.map(val => {
+            const stringVal = String(val || '');
+            if (stringVal.includes(',') || stringVal.includes('"') || stringVal.includes('\n')) {
+                return `"${stringVal.replace(/"/g, '""')}"`;
+            }
+            return stringVal;
         });
-    } else {
-        // No lanes? Put everything in one list "General"
-        // @ts-ignore
-        const tasks = elementRegistry.filter((e: any) => e.type.includes('Task'));
-        const listContent = {
-            name: "General",
-            tasks: tasks.map((e: any) => {
-                const bo = e.businessObject;
-                return {
-                    name: bo.name || 'Untitled Task',
-                    description: (bo.documentation && bo.documentation[0] ? bo.documentation[0].text : ''),
-                    status: bo.get('custom:clickupStatus') || 'open',
-                    // ...
-                };
-            })
-        };
-        folder.lists.push(listContent);
-    }
 
-    return folder;
+        rows.push(csvRow.join(','));
+    });
+
+    return { csv: rows.join('\n'), filename: `${safeProcessName}.csv` };
+}
+
+export function downloadCSV(data: string, filename: string) {
+    const blob = new Blob([data], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
 }
 
 export function downloadJson(data: any, filename: string) {

@@ -11,7 +11,7 @@ const customTranslateModule = {
 };
 
 // Initial BPMN XML with Pool and Lanes (Marketing & Sales)
-const initialXml = `<?xml version="1.0" encoding="UTF-8"?>
+export const initialXml = `<?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn">
   <bpmn:collaboration id="Collaboration_1">
     <bpmn:participant id="Participant_1" name="Процес: Лід в CRM" processRef="Process_1" />
@@ -71,13 +71,28 @@ export function Canvas({ onModelerInit, modelerInstance }: CanvasProps) {
       }
     });
 
-    modeler.importXML(initialXml).then(() => {
+    const savedXml = localStorage.getItem('bpmnDiagram');
+    const xmlToImport = savedXml || initialXml;
+
+    modeler.importXML(xmlToImport).then(() => {
       const canvas = modeler.get('canvas');
       // @ts-ignore
       canvas.zoom('fit-viewport');
     }).catch(console.error);
 
     onModelerInit(modeler);
+
+    // Autosave on changes
+    modeler.on('commandStack.changed', async () => {
+      try {
+        const { xml } = await modeler.saveXML({ format: true });
+        if (xml) {
+          localStorage.setItem('bpmnDiagram', xml);
+        }
+      } catch (err) {
+        console.error('Failed to save BPMN', err);
+      }
+    });
 
     return () => {
       modeler.destroy();
