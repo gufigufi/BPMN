@@ -8,122 +8,120 @@ body,
   height: 100%;
   margin: 0;
   overflow: hidden;
+  background-color: #0f172a;
+  /* Slate 900 for the app shell */
+  color: #f1f5f9;
 }
 
-/* BPMN Customization */
-.djs-palette {
-  background: #ffffff !important;
-  border: 1px solid #e2e8f0 !important;
-  border-radius: 8px !important;
+/* 1. BPMN CANVAS - Standard Light Look */
+.djs-container {
+  background-color: #ffffff !important;
+  color: #000000;
 }
 
-/* --- LIGHT MODE DEFAULTS --- */
+/* Base shape and text colors for white background */
 .djs-visual rect,
 .djs-visual circle,
-.djs-visual polygon {
+.djs-visual polygon,
+.djs-visual polyline,
+.djs-visual ellipse,
+.djs-visual path {
   fill: #ffffff;
-  stroke: #111827;
+  /* Default white fill */
+  stroke: #222222;
 }
 
-/* --- DARK MODE DEFAULTS (Container) --- */
-.dark .djs-container {
-  background-color: #0f172a !important;
-  /* Slate 900 */
-}
-
-/* 1. SHAPE COLORS IN DARK MODE */
-/* Forces uncolored elements to dark background using !important */
-.dark .djs-visual rect,
-.dark .djs-visual circle,
-.dark .djs-visual polygon,
-.dark .djs-visual path {
-  fill: rgb(31 41 55) !important;
-  /* Original Gray 800 */
-  stroke: #475569 !important;
-  /* Slate 600 */
-}
-
-/* Allow manual coloring to override the default dark fill */
-.dark .djs-visual[style*="fill"] rect,
-.dark .djs-visual[style*="fill"] circle,
-.dark .djs-visual[style*="fill"] polygon,
-.dark .djs-visual[style*="fill"] path {
+/* 2. MANUAL COLOR OVERRIDES (CRITICAL FIX) */
+/* We MUST force children to inherit fill/stroke when parent group has a manual color style. */
+.djs-visual[style*="fill"] rect,
+.djs-visual[style*="fill"] circle,
+.djs-visual[style*="fill"] polygon,
+.djs-visual[style*="fill"] polyline,
+.djs-visual[style*="fill"] ellipse,
+.djs-visual[style*="fill"] path {
   fill: inherit !important;
+}
+
+.djs-visual[style*="stroke"] rect,
+.djs-visual[style*="stroke"] circle,
+.djs-visual[style*="stroke"] polygon,
+.djs-visual[style*="stroke"] polyline,
+.djs-visual[style*="stroke"] ellipse,
+.djs-visual[style*="stroke"] path {
   stroke: inherit !important;
 }
 
-/* 2. TEXT COLORS (LIGHT/DARK DEFAULTS) */
+/* Special fix for Lanes/Pools to ensure they are always visible when colored */
+.djs-element[data-element-id*="Lane"] .djs-visual rect,
+.djs-element[data-element-id*="Participant"] .djs-visual rect {
+  fill: inherit;
+}
+
+/* 3. CONNECTIONS & MARKERS */
+.djs-connection path {
+  stroke: #222222 !important;
+}
+
+marker path {
+  fill: #222222 !important;
+  stroke: none !important;
+}
+
+/* 4. TEXT & LABELS */
+/* Set default text color WITHOUT !important to allow overrides */
 .djs-container text,
+.djs-container tspan,
 .djs-label {
+  fill: #000000;
   font-family: 'Inter', sans-serif !important;
-  font-size: 12px !important;
-  font-weight: 500 !important;
-  fill: #111827 !important;
-  /* Default for Light Mode */
+  font-size: 11px !important;
 }
 
-.dark .djs-container text,
-.dark .djs-label {
-  fill: #ffffff !important;
-  /* Default for Dark Mode */
+/* Label toggle support (T-button in panel) */
+.label-dark text,
+.label-dark tspan,
+.label-dark .djs-label {
+  fill: #000000 !important;
 }
 
-/* 3. T-TOGGLE OVERRIDES (MARKERS) */
 .label-light text,
+.label-light tspan,
 .label-light .djs-label {
   fill: #ffffff !important;
 }
 
-.label-dark text,
-.label-dark .djs-label {
-  fill: #111827 !important;
+/* 5. UI COMPONENTS (Themed to bridge dark app shell and white canvas) */
+.djs-palette {
+  background: transparent !important;
+  border: none !important;
 }
 
-/* Connections & Markers in Dark Mode */
-.dark .djs-connection:not([style*="stroke"]) path {
-  stroke: #64748b !important;
+.djs-palette .entry,
+.djs-palette .entry::before {
+  color: #333333 !important;
 }
 
-.dark marker path {
-  fill: #64748b !important;
-  stroke: #64748b !important;
+.djs-context-pad {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
-/* UI Components (Palette, Context Pad, Popups) */
-.dark .djs-palette {
-  background: #1e293b !important;
-  border: 1px solid #334155 !important;
+.djs-context-pad .entry,
+.djs-context-pad .entry::before {
+  color: #333333 !important;
 }
 
-.dark .djs-palette .entry {
-  color: #94a3b8 !important;
+.djs-context-pad .entry:hover {
+  background-color: rgba(0, 0, 0, 0.05) !important;
 }
 
-.dark .djs-palette .entry:hover {
-  color: #3b82f6 !important;
-  background-color: #334155 !important;
+.djs-popup {
+  background: #ffffff !important;
+  border: 1px solid #cccccc !important;
+  color: #333333 !important;
 }
 
-.dark .djs-context-pad {
-  background-color: #1e293b !important;
-  border: 1px solid #334155 !important;
-  border-radius: 8px !important;
-}
-
-.dark .djs-context-pad .entry:hover {
-  background-color: #334155 !important;
-}
-
-.dark .djs-popup {
-  background: #1e293b !important;
-  border: 1px solid #334155 !important;
-  color: #f1f5f9 !important;
-}
-
-.dark .djs-popup-header {
-  border-bottom: 1px solid #334155 !important;
-}
-
-.dark .djs-popup-body .entry:hover {
-  background-color: #334155 !important;
+.djs-popup-header {
+  border-bottom: 1px solid #eeeeee !important;
 }

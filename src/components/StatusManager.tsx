@@ -43,20 +43,20 @@ export function StatusManager({ isOpen, onClose, statuses, onAdd, onUpdate, onDe
 
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-lg overflow-hidden border border-gray-200 dark:border-gray-700 transition-all scale-100">
-                <div className="flex justify-between items-center p-6 border-b border-gray-100 dark:border-gray-700">
+            <div className="bg-gray-800 rounded-xl shadow-2xl w-full max-w-lg overflow-hidden border border-gray-700 transition-all scale-100">
+                <div className="flex justify-between items-center p-6 border-b border-gray-700">
                     <div>
-                        <h2 className="text-xl font-bold text-gray-900 dark:text-white">Керування статусами</h2>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">Налаштуйте власні статуси в стилі Notion</p>
+                        <h2 className="text-xl font-bold text-white">Керування статусами</h2>
+                        <p className="text-xs text-gray-400">Налаштуйте власні статуси в стилі Notion</p>
                     </div>
-                    <button onClick={onClose} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full text-gray-400 transition-colors">
+                    <button onClick={onClose} className="p-2 hover:bg-gray-700 rounded-full text-gray-400 transition-colors">
                         <X size={20} />
                     </button>
                 </div>
 
                 <div className="p-6 space-y-6">
                     {/* Add New Section */}
-                    <div className="bg-gray-50 dark:bg-gray-900/50 p-4 rounded-lg border border-gray-100 dark:border-gray-700">
+                    <div className="bg-gray-900/50 p-4 rounded-lg border border-gray-700">
                         <label className="block text-xs font-semibold text-gray-500 uppercase mb-3 px-1">Додати новий</label>
                         <div className="flex flex-col gap-3">
                             <input
@@ -65,7 +65,7 @@ export function StatusManager({ isOpen, onClose, statuses, onAdd, onUpdate, onDe
                                 value={newLabel}
                                 onChange={(e) => setNewLabel(e.target.value)}
                                 onKeyDown={(e) => e.key === 'Enter' && handleAdd()}
-                                className="w-full px-4 py-2 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 dark:text-white transition-all outline-none"
+                                className="w-full px-4 py-2 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-gray-700 text-white transition-all outline-none"
                             />
                             <div className="flex items-center justify-between gap-2 px-1">
                                 <div className="flex gap-2">
@@ -97,13 +97,13 @@ export function StatusManager({ isOpen, onClose, statuses, onAdd, onUpdate, onDe
                             const isEditing = editingId === status.id;
 
                             return (
-                                <div key={status.id} className={`group flex items-center gap-3 p-3 rounded-lg border transition-all ${isEditing ? 'border-blue-300 ring-2 ring-blue-50/50 bg-blue-50/30 dark:bg-blue-900/10' : 'border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/30'}`}>
+                                <div key={status.id} className={`group flex items-center gap-3 p-3 rounded-lg border transition-all ${isEditing ? 'border-blue-300 ring-2 ring-blue-50/50 bg-blue-900/10' : 'border-gray-700 hover:bg-gray-700/30'}`}>
                                     {isEditing ? (
                                         <div className="flex flex-col flex-1 gap-2">
                                             <input
                                                 value={editLabel}
                                                 onChange={e => setEditLabel(e.target.value)}
-                                                className="w-full px-3 py-1.5 text-sm border rounded focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white outline-none"
+                                                className="w-full px-3 py-1.5 text-sm border rounded focus:ring-2 focus:ring-blue-500 bg-gray-700 border-gray-600 text-white outline-none"
                                                 autoFocus
                                             />
                                             <div className="flex gap-2 items-center">
@@ -117,7 +117,7 @@ export function StatusManager({ isOpen, onClose, statuses, onAdd, onUpdate, onDe
                                                     ))}
                                                 </div>
                                                 <div className="ml-auto flex gap-1">
-                                                    <button onClick={() => setEditingId(null)} className="px-3 py-1 text-xs text-gray-500 hover:bg-gray-200 rounded">Скасувати</button>
+                                                    <button onClick={() => setEditingId(null)} className="px-3 py-1 text-xs text-gray-400 hover:bg-gray-700 rounded">Скасувати</button>
                                                     <button onClick={saveEdit} className="px-3 py-1 text-xs bg-blue-600 text-white rounded flex items-center gap-1"><Check size={12} /> Зберегти</button>
                                                 </div>
                                             </div>
@@ -128,10 +128,10 @@ export function StatusManager({ isOpen, onClose, statuses, onAdd, onUpdate, onDe
                                                 {status.label}
                                             </span>
                                             <div className="ml-auto flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                <button onClick={() => startEdit(status)} className="p-1.5 hover:bg-blue-100 dark:hover:bg-blue-900/40 text-blue-600 rounded-md" title="Редагувати">
+                                                <button onClick={() => startEdit(status)} className="p-1.5 hover:bg-blue-900/40 text-blue-600 rounded-md" title="Редагувати">
                                                     <Edit2 size={14} />
                                                 </button>
-                                                <button onClick={() => onDelete(status.id)} className="p-1.5 hover:bg-red-100 dark:hover:bg-red-900/40 text-red-600 rounded-md" title="Видалити">
+                                                <button onClick={() => onDelete(status.id)} className="p-1.5 hover:bg-red-900/40 text-red-600 rounded-md" title="Видалити">
                                                     <Trash2 size={14} />
                                                 </button>
                                             </div>

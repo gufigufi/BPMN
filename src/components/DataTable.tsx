@@ -249,12 +249,12 @@ export function DataTable({ modeler, statuses = [] }: DataTableProps) {
     };
 
     const renderCell = (row: TaskRow, colId: keyof TaskRow) => {
-        let baseInputClass = "bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 w-full text-sm dark:text-gray-200 rounded px-2 py-1.5 transition-all outline-none shadow-sm h-full truncate";
+        let baseInputClass = "bg-gray-800 border border-gray-600 focus:ring-2 focus:ring-blue-500 w-full text-sm text-gray-200 rounded px-2 py-1.5 transition-all outline-none shadow-sm h-full truncate";
 
-        if (colId === 'inputData') baseInputClass += " border-l-4 border-l-green-500 dark:border-l-green-500";
-        if (colId === 'outputData') baseInputClass += " border-l-4 border-l-red-500 dark:border-l-red-500";
+        if (colId === 'inputData') baseInputClass += " border-l-4 border-l-green-500";
+        if (colId === 'outputData') baseInputClass += " border-l-4 border-l-red-500";
 
-        if (colId === 'id') return <span className="text-xs text-gray-400">{row.id}</span>;
+        if (colId === 'id') return <span className="text-xs text-gray-500">{row.id}</span>;
 
         if (colId === 'status') {
             const currentStatus = statuses.find(s => s.label === row.status);
@@ -265,19 +265,19 @@ export function DataTable({ modeler, statuses = [] }: DataTableProps) {
                 <div className="relative h-full flex items-center" onClick={(e) => e.stopPropagation()}>
                     <button
                         onClick={() => setActiveStatusPopover(isSelected ? null : row.id)}
-                        className={`flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium transition-all hover:brightness-95 active:scale-95 whitespace-nowrap ${colorObj ? colorObj.class : 'bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400'}`}
+                        className={`flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium transition-all hover:brightness-95 active:scale-95 whitespace-nowrap ${colorObj ? colorObj.class : 'bg-gray-700 text-gray-400'}`}
                     >
                         {row.status || 'Вибрати...'}
                         <ChevronDown size={12} className={`opacity-50 transition-transform ${isSelected ? 'rotate-180' : ''}`} />
                     </button>
 
                     {isSelected && (
-                        <div ref={popoverRef} className="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-100 dark:border-gray-700 p-2 z-[60] animate-in fade-in slide-in-from-top-2">
+                        <div ref={popoverRef} className="absolute left-0 mt-2 w-48 bg-gray-800 rounded-xl shadow-2xl border border-gray-700 p-2 z-[60] animate-in fade-in slide-in-from-top-2">
                             <div className="text-[10px] font-bold text-gray-400 uppercase px-2 mb-1">Змінити статус</div>
                             <div className="max-h-60 overflow-y-auto custom-scrollbar">
                                 <button
                                     onClick={() => { handleUpdate(row.id, 'custom:notionStatus', ''); setActiveStatusPopover(null); }}
-                                    className="w-full text-left px-2 py-1.5 text-xs hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg text-gray-400 mb-1"
+                                    className="w-full text-left px-2 py-1.5 text-xs hover:bg-gray-700 rounded-lg text-gray-400 mb-1"
                                 >
                                     Очистити
                                 </button>
@@ -287,7 +287,7 @@ export function DataTable({ modeler, statuses = [] }: DataTableProps) {
                                         <button
                                             key={s.id}
                                             onClick={() => { handleUpdate(row.id, 'custom:notionStatus', s.label); setActiveStatusPopover(null); }}
-                                            className="w-full flex items-center gap-2 px-2 py-1.5 text-xs hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors group"
+                                            className="w-full flex items-center gap-2 px-2 py-1.5 text-xs hover:bg-gray-700 rounded-lg transition-colors group"
                                         >
                                             <span className={`w-2 h-2 rounded-full ${sColor?.dot}`} />
                                             <span className={`px-2 py-0.5 rounded-full ${sColor?.class} group-hover:brightness-95`}>
@@ -347,22 +347,22 @@ export function DataTable({ modeler, statuses = [] }: DataTableProps) {
     };
 
     return (
-        <div className="flex-1 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 overflow-hidden flex flex-col relative z-20 transition-colors">
-            <div className="p-3 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center bg-gray-50/80 dark:bg-gray-900/80 backdrop-blur-md relative z-50">
+        <div className="flex-1 bg-gray-800 border-t border-gray-700 flex flex-col relative z-20 transition-colors">
+            <div className="p-3 border-b border-gray-700 flex justify-between items-center bg-gray-900/80 backdrop-blur-md relative z-50">
                 <div className="flex items-center gap-3">
-                    <h3 className="text-sm font-bold text-gray-700 dark:text-gray-200 uppercase tracking-tight">Реєстр завдань</h3>
-                    <span className="text-[10px] bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full dark:bg-blue-900/40 dark:text-blue-300 font-bold">{processedRows.length} пунктів</span>
+                    <h3 className="text-sm font-bold text-gray-200 uppercase tracking-tight">Реєстр завдань</h3>
+                    <span className="text-[10px] bg-blue-900/40 text-blue-300 px-2 py-0.5 rounded-full font-bold">{processedRows.length} пунктів</span>
                 </div>
                 <div className="relative">
                     <button
                         onClick={() => setShowSettings(!showSettings)}
-                        className={`p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-300 flex items-center gap-2 text-xs font-medium transition-colors ${showSettings ? 'bg-gray-200 dark:bg-gray-700 ring-2 ring-blue-500/20' : ''}`}
+                        className={`p-1.5 rounded-lg hover:bg-gray-700 text-gray-300 flex items-center gap-2 text-xs font-medium transition-colors ${showSettings ? 'bg-gray-700 ring-2 ring-blue-500/20' : ''}`}
                     >
                         <Settings size={14} /> Налаштування полів
                     </button>
 
                     {showSettings && (
-                        <div className="absolute right-0 top-full mt-2 w-72 bg-white dark:bg-gray-800 shadow-2xl border border-gray-100 dark:border-gray-700 rounded-xl p-3 z-[100] animate-in fade-in zoom-in-95 origin-top-right">
+                        <div className="absolute right-0 top-full mt-2 w-72 bg-gray-800 shadow-2xl border border-gray-700 rounded-xl p-3 z-[100] animate-in fade-in zoom-in-95 origin-top-right">
                             <h4 className="text-[10px] font-black mb-3 text-gray-400 uppercase tracking-widest flex justify-between">
                                 Порядок полів (Drag & Drop)
                                 <button onClick={() => setShowSettings(false)} className="hover:text-red-500"><Settings size={10} /></button>
@@ -376,18 +376,18 @@ export function DataTable({ modeler, statuses = [] }: DataTableProps) {
                                         onDragOver={(e) => handleDragOver(e, idx)}
                                         onDrop={() => handleDrop(idx)}
                                         onDragEnd={handleDragEnd}
-                                        className={`flex items-center gap-3 p-2 rounded-lg transition-all cursor-default ${dragOverIdx === idx ? 'bg-blue-50 dark:bg-blue-900/20 border-t-2 border-blue-500' : 'hover:bg-gray-50 dark:hover:bg-gray-700/50'} ${draggedIdx === idx ? 'opacity-40' : ''}`}
+                                        className={`flex items-center gap-3 p-2 rounded-lg transition-all cursor-default ${dragOverIdx === idx ? 'bg-blue-900/20 border-t-2 border-blue-500' : 'hover:bg-gray-700/50'} ${draggedIdx === idx ? 'opacity-40' : ''}`}
                                     >
-                                        <div className="cursor-grab active:cursor-grabbing text-gray-300 hover:text-gray-500 dark:text-gray-600 dark:hover:text-gray-400 transition-colors">
+                                        <div className="cursor-grab active:cursor-grabbing text-gray-600 hover:text-gray-400 transition-colors">
                                             <GripVertical size={16} />
                                         </div>
                                         <div className="flex-1 flex items-center justify-between">
-                                            <span className={`text-xs font-medium ${col.visible ? 'text-gray-700 dark:text-gray-200' : 'text-gray-400 dark:text-gray-500'}`}>{col.label}</span>
+                                            <span className={`text-xs font-medium ${col.visible ? 'text-gray-200' : 'text-gray-500'}`}>{col.label}</span>
                                             <input
                                                 type="checkbox"
                                                 checked={col.visible}
                                                 onChange={() => toggleColumn(col.id)}
-                                                className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 transition-all cursor-pointer shadow-sm"
+                                                className="w-4 h-4 rounded border-gray-600 bg-gray-700 text-blue-600 focus:ring-blue-500 transition-all cursor-pointer shadow-sm"
                                             />
                                         </div>
                                     </div>
@@ -399,8 +399,8 @@ export function DataTable({ modeler, statuses = [] }: DataTableProps) {
             </div>
 
             <div className="overflow-auto flex-1 custom-scrollbar scroll-smooth">
-                <table className="min-w-full divide-y divide-gray-100 dark:divide-gray-800 table-fixed">
-                    <thead className="bg-gray-50 dark:bg-gray-700 sticky top-0 z-40 shadow-sm transition-colors">
+                <table className="min-w-full divide-y divide-gray-800 table-fixed">
+                    <thead className="bg-gray-700 sticky top-0 z-40 shadow-sm transition-colors">
                         <tr>
                             {columns.filter(c => c.visible).map((col) => {
                                 const originalIdx = columns.findIndex(c => c.id === col.id);
@@ -408,9 +408,9 @@ export function DataTable({ modeler, statuses = [] }: DataTableProps) {
                                     <th
                                         key={col.id}
                                         style={{ width: col.width }}
-                                        className="px-5 py-4 text-left text-[11px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider relative group select-none border-b border-gray-100 dark:border-gray-800"
+                                        className="px-5 py-4 text-left text-[11px] font-bold text-gray-500 uppercase tracking-wider relative group select-none border-b border-gray-800"
                                     >
-                                        <div className="flex items-center gap-2 cursor-pointer group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors" onClick={() => handleSort(col.id)}>
+                                        <div className="flex items-center gap-2 cursor-pointer group-hover:text-gray-300 transition-colors" onClick={() => handleSort(col.id)}>
                                             <span className="truncate">{col.label}</span>
                                             {sortConfig?.key === col.id ? (
                                                 sortConfig.direction === 'asc' ? <ArrowUp size={12} className="text-blue-500 shrink-0" /> : <ArrowDown size={12} className="text-blue-500 shrink-0" />
@@ -421,7 +421,7 @@ export function DataTable({ modeler, statuses = [] }: DataTableProps) {
                                         <div className="mt-2">
                                             {col.id === 'status' && (
                                                 <select
-                                                    className="w-full text-[10px] px-2 py-1 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 outline-none focus:ring-2 focus:ring-blue-500/20 transition-all font-medium"
+                                                    className="w-full text-[10px] px-2 py-1 rounded-lg border border-gray-600 bg-gray-800 text-gray-300 outline-none focus:ring-2 focus:ring-blue-500/20 transition-all font-medium"
                                                     value={filters[col.id] || ''}
                                                     onClick={(e) => e.stopPropagation()}
                                                     onChange={(e) => setFilters(prev => ({ ...prev, [col.id]: e.target.value }))}
@@ -432,7 +432,7 @@ export function DataTable({ modeler, statuses = [] }: DataTableProps) {
                                             )}
                                             {col.id === 'priority' && (
                                                 <select
-                                                    className="w-full text-[10px] px-2 py-1 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 outline-none focus:ring-2 focus:ring-blue-500/20 transition-all font-medium"
+                                                    className="w-full text-[10px] px-2 py-1 rounded-lg border border-gray-600 bg-gray-800 text-gray-300 outline-none focus:ring-2 focus:ring-blue-500/20 transition-all font-medium"
                                                     value={filters[col.id] || ''}
                                                     onClick={(e) => e.stopPropagation()}
                                                     onChange={(e) => setFilters(prev => ({ ...prev, [col.id]: e.target.value }))}
@@ -445,7 +445,7 @@ export function DataTable({ modeler, statuses = [] }: DataTableProps) {
                                             )}
                                             {col.id === 'dept_id' && (
                                                 <select
-                                                    className="w-full text-[10px] px-2 py-1 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 outline-none focus:ring-2 focus:ring-blue-500/20 transition-all font-medium"
+                                                    className="w-full text-[10px] px-2 py-1 rounded-lg border border-gray-600 bg-gray-800 text-gray-300 outline-none focus:ring-2 focus:ring-blue-500/20 transition-all font-medium"
                                                     value={filters[col.id] || ''}
                                                     onClick={(e) => e.stopPropagation()}
                                                     onChange={(e) => setFilters(prev => ({ ...prev, [col.id]: e.target.value }))}
@@ -460,7 +460,7 @@ export function DataTable({ modeler, statuses = [] }: DataTableProps) {
                                                 <input
                                                     type="text"
                                                     placeholder={`...`}
-                                                    className="w-full text-[10px] px-2 py-1 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                                                    className="w-full text-[10px] px-2 py-1 rounded-lg border border-gray-600 bg-gray-800 text-gray-300 outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
                                                     value={filters[col.id] || ''}
                                                     onClick={(e) => e.stopPropagation()}
                                                     onChange={(e) => setFilters(prev => ({ ...prev, [col.id]: e.target.value }))}
@@ -469,7 +469,7 @@ export function DataTable({ modeler, statuses = [] }: DataTableProps) {
                                         </div>
                                         <div
                                             onMouseDown={(e) => onResizeStart(e, originalIdx)}
-                                            className="absolute right-0 top-2 bottom-2 w-1.5 cursor-col-resize hover:bg-blue-500/50 bg-gray-200/50 dark:bg-gray-600/30 rounded-full transition-all z-50 group-hover:bg-gray-300 dark:group-hover:bg-gray-500"
+                                            className="absolute right-0 top-2 bottom-2 w-1.5 cursor-col-resize hover:bg-blue-500/50 bg-gray-600/30 rounded-full transition-all z-50 group-hover:bg-gray-500"
                                             title="Потягніть, щоб змінити ширину"
                                         />
                                     </th>
@@ -477,18 +477,18 @@ export function DataTable({ modeler, statuses = [] }: DataTableProps) {
                             })}
                         </tr>
                     </thead>
-                    <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-50 dark:divide-gray-800 transition-colors">
+                    <tbody className="bg-gray-900 divide-y divide-gray-800 transition-colors">
                         {processedRows.map((row) => (
                             <tr
                                 key={row.id}
                                 onClick={() => handleRowClick(row.id)}
-                                className="group hover:bg-blue-50/40 dark:hover:bg-blue-900/10 transition-all cursor-pointer active:bg-blue-100/30 dark:active:bg-blue-900/20"
+                                className={`group hover:bg-blue-900/10 transition-all cursor-pointer active:bg-blue-900/20 ${activeStatusPopover === row.id ? 'z-50 relative' : ''}`}
                             >
                                 {columns.filter(c => c.visible).map(col => (
                                     <td
                                         key={col.id}
                                         style={{ width: col.width }}
-                                        className="px-5 py-2 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300 border-r border-gray-50 dark:border-gray-800/50 last:border-r-0 overflow-hidden"
+                                        className="px-5 py-2 whitespace-nowrap text-sm text-gray-300 border-r border-gray-800/50 last:border-r-0 relative overflow-visible"
                                     >
                                         {renderCell(row, col.id)}
                                     </td>

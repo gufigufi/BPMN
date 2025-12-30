@@ -1,15 +1,15 @@
 import BpmnModeler from 'bpmn-js/lib/Modeler';
 
-// Map of modern colors for departments
+// Map of colors for departments (vibrant for white canvas)
 export const DEPT_COLORS: Record<string, { fill: string; stroke: string }> = {
-    'IT': { fill: '#dbeafe', stroke: '#1d4ed8' },
-    'PR': { fill: '#fce7f3', stroke: '#be185d' },
-    'HR': { fill: '#dcfce7', stroke: '#15803d' },
-    'Sales': { fill: '#ffedd5', stroke: '#c2410c' },
-    'Finance': { fill: '#f3e8ff', stroke: '#6d28d9' },
-    'Legal': { fill: '#fee2e2', stroke: '#b91c1c' },
-    'Marketing': { fill: '#f5f5f4', stroke: '#44403c' },
-    'Default': { fill: '#f8fafc', stroke: '#475569' }
+    'IT': { fill: '#e0f2fe', stroke: '#0369a1' },        // Sky blue
+    'PR': { fill: '#fae8ff', stroke: '#a21caf' },        // Fuchia
+    'HR': { fill: '#dcfce7', stroke: '#15803d' },        // Green
+    'Sales': { fill: '#ffedd5', stroke: '#c2410c' },     // Orange
+    'Finance': { fill: '#fef9c3', stroke: '#a16207' },    // Yellow
+    'Legal': { fill: '#fee2e2', stroke: '#b91c1c' },      // Red
+    'Marketing': { fill: '#e0e7ff', stroke: '#4338ca' },  // Indigo
+    'Default': { fill: '#f1f5f9', stroke: '#475569' }     // Slate
 };
 
 export function autoAssignDepartments(modeler: BpmnModeler) {
@@ -23,12 +23,17 @@ export function autoAssignDepartments(modeler: BpmnModeler) {
 
     // First, color the lanes themselves based on their names
     lanes.forEach((lane: any) => {
-        const name = lane.businessObject.name || '';
-        const color = DEPT_COLORS[name] || DEPT_COLORS['Default'];
-        modeling.setColor(lane, {
-            fill: color.fill,
-            stroke: color.stroke
-        });
+        // Only color the lane if it doesn't have a manual color yet
+        const hasManualColor = lane.di && (lane.di.get('fill') || lane.di.get('stroke'));
+
+        if (!hasManualColor) {
+            const name = lane.businessObject.name || '';
+            const color = DEPT_COLORS[name] || DEPT_COLORS['Default'];
+            modeling.setColor(lane, {
+                fill: color.fill,
+                stroke: color.stroke
+            });
+        }
     });
 
     elements.forEach((shape: any) => {
@@ -68,12 +73,16 @@ export function autoAssignDepartments(modeler: BpmnModeler) {
                 });
                 shape.businessObject.dept_id = deptId;
 
-                // Also color the element based on the department
-                const color = DEPT_COLORS[deptId] || DEPT_COLORS['Default'];
-                modeling.setColor(shape, {
-                    fill: color.fill,
-                    stroke: color.stroke
-                });
+                // Only color the element if it doesn't have a manual color yet
+                const hasManualColor = shape.di && (shape.di.get('fill') || shape.di.get('stroke'));
+
+                if (!hasManualColor) {
+                    const color = DEPT_COLORS[deptId] || DEPT_COLORS['Default'];
+                    modeling.setColor(shape, {
+                        fill: color.fill,
+                        stroke: color.stroke
+                    });
+                }
 
                 count++;
             }

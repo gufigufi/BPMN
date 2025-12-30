@@ -3,13 +3,6 @@ import BpmnModeler from 'bpmn-js/lib/Modeler';
 import 'bpmn-js/dist/assets/diagram-js.css';
 import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css';
 import { useLaneLogic } from '../hooks/useLaneLogic';
-import { customTranslate } from '../utils/customTranslate';
-
-// Helper to define local translate module
-const customTranslateModule = {
-  translate: ['value', customTranslate]
-};
-
 // Initial BPMN XML with Pool and Lanes (Marketing & Sales)
 export const initialXml = `<?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn">
@@ -63,9 +56,6 @@ export function Canvas({ onModelerInit, modelerInstance }: CanvasProps) {
 
     const modeler = new BpmnModeler({
       container: containerRef.current,
-      additionalModules: [
-        customTranslateModule
-      ],
       keyboard: {
         bindTo: document
       }

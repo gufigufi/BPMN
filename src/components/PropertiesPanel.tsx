@@ -63,7 +63,7 @@ export function PropertiesPanel({ modeler, statuses = [] }: PropertiesPanelProps
                 const bo = element.businessObject;
                 const canvas = modeler.get('canvas') as any;
 
-                const labelColor = bo.get('custom:labelColor') || (document.documentElement.classList.contains('dark') ? 'white' : 'dark');
+                const labelColor = bo.get('custom:labelColor') || 'white';
 
                 setSelectedElement(element);
                 setFormData({
@@ -165,11 +165,11 @@ export function PropertiesPanel({ modeler, statuses = [] }: PropertiesPanelProps
 
     if (!selectedElement) {
         return (
-            <div className="w-full border-l border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 flex flex-col h-full shadow-xl z-10 transition-colors">
-                <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center bg-gray-50 dark:bg-gray-900">
-                    <h2 className="font-semibold text-gray-700 dark:text-gray-200 uppercase text-xs tracking-widest">Властивості</h2>
+            <div className="w-full border-l border-gray-700 bg-gray-800 flex flex-col h-full shadow-xl z-10 transition-colors">
+                <div className="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900">
+                    <h2 className="font-semibold text-gray-200 uppercase text-xs tracking-widest">Властивості</h2>
                 </div>
-                <div className="p-8 text-center text-gray-400 dark:text-gray-500 mt-10 text-sm">
+                <div className="p-8 text-center text-gray-500 mt-10 text-sm">
                     <p>Виберіть елемент на схемі, щоб редагувати його властивості.</p>
                 </div>
             </div>
@@ -179,16 +179,16 @@ export function PropertiesPanel({ modeler, statuses = [] }: PropertiesPanelProps
     const isGateway = selectedElement.type.includes('Gateway');
 
     return (
-        <div className="w-full border-l border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 flex flex-col h-full shadow-xl z-10 overflow-hidden transition-colors">
-            <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center bg-gray-50 dark:bg-gray-900">
+        <div className="w-full border-l border-gray-700 bg-gray-800 flex flex-col h-full shadow-xl z-10 overflow-hidden transition-colors">
+            <div className="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-900">
                 <div className="flex flex-col">
                     <span className="text-[10px] text-gray-400 font-bold uppercase">{selectedElement.id}</span>
-                    <h2 className="font-bold text-gray-800 dark:text-gray-100 text-sm truncate w-24">
+                    <h2 className="font-bold text-gray-100 text-sm truncate w-24">
                         {selectedElement.type.split(':')[1]}
                     </h2>
                 </div>
                 <input
-                    className="text-[11px] font-bold px-2 py-1.5 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-lg border border-blue-200 dark:border-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 w-24 text-center"
+                    className="text-[11px] font-bold px-2 py-1.5 bg-blue-900/30 text-blue-300 rounded-lg border border-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 w-24 text-center"
                     value={formData.dept_id}
                     onChange={(e) => handleChange('dept_id', e.target.value)}
                     placeholder="Відділ"
@@ -200,17 +200,17 @@ export function PropertiesPanel({ modeler, statuses = [] }: PropertiesPanelProps
                 <div className="space-y-4">
                     <div className="flex justify-between items-center">
                         <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Дизайн блоку</label>
-                        <div className="flex items-center gap-1.5 p-1 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                        <div className="flex items-center gap-1.5 p-1 bg-gray-700 rounded-lg">
                             <button
                                 onClick={() => handleChange('labelColor', 'white')}
-                                className={`p-1 rounded ${formData.labelColor === 'white' ? 'bg-white dark:bg-gray-600 shadow-sm text-blue-500' : 'text-gray-400'}`}
+                                className={`p-1 rounded ${formData.labelColor === 'white' ? 'bg-gray-600 shadow-sm text-blue-500' : 'text-gray-400'}`}
                                 title="Світлий текст"
                             >
                                 <Type size={14} />
                             </button>
                             <button
                                 onClick={() => handleChange('labelColor', 'dark')}
-                                className={`p-1 rounded ${formData.labelColor === 'dark' ? 'bg-white dark:bg-gray-600 shadow-sm text-blue-500' : 'text-gray-400'}`}
+                                className={`p-1 rounded ${formData.labelColor === 'dark' ? 'bg-gray-600 shadow-sm text-blue-500' : 'text-gray-400'}`}
                                 title="Темний текст"
                             >
                                 <Type size={14} className="fill-current" />
@@ -223,7 +223,7 @@ export function PropertiesPanel({ modeler, statuses = [] }: PropertiesPanelProps
                             <button
                                 key={c.name}
                                 onClick={() => handleChange('color', JSON.stringify({ fill: c.fill, stroke: c.stroke }))}
-                                className={`w-9 h-9 rounded-xl border-2 transition-all hover:scale-105 ${formData.fill === c.fill ? 'border-blue-500 ring-2 ring-blue-500/30' : 'border-gray-100 dark:border-gray-700'}`}
+                                className={`w-9 h-9 rounded-xl border-2 transition-all hover:scale-105 ${formData.fill === c.fill ? 'border-blue-500 ring-2 ring-blue-500/30' : 'border-gray-700'}`}
                                 style={{ backgroundColor: c.fill }}
                                 title={c.name}
                             />
@@ -245,7 +245,7 @@ export function PropertiesPanel({ modeler, statuses = [] }: PropertiesPanelProps
                                 <div key={idx} className="relative group">
                                     <button
                                         onClick={() => handleChange('color', JSON.stringify(f))}
-                                        className={`w-9 h-9 rounded-xl border-2 transition-all ${formData.fill === f.fill ? 'border-yellow-400 ring-2 ring-yellow-400/30' : 'border-gray-100 dark:border-gray-700'}`}
+                                        className={`w-9 h-9 rounded-xl border-2 transition-all ${formData.fill === f.fill ? 'border-yellow-400 ring-2 ring-yellow-400/30' : 'border-gray-700'}`}
                                         style={{ backgroundColor: f.fill }}
                                     />
                                     <button
@@ -257,7 +257,7 @@ export function PropertiesPanel({ modeler, statuses = [] }: PropertiesPanelProps
                                 </div>
                             ))}
                             {favorites.length === 0 && (
-                                <div className="col-span-5 border-2 border-dashed border-gray-100 dark:border-gray-700 py-4 rounded-xl text-center">
+                                <div className="col-span-5 border-2 border-dashed border-gray-700 py-4 rounded-xl text-center">
                                     <p className="text-[10px] text-gray-400 italic">Тут будуть ваші кольори</p>
                                 </div>
                             )}
@@ -274,21 +274,21 @@ export function PropertiesPanel({ modeler, statuses = [] }: PropertiesPanelProps
                         />
                         <button
                             onClick={addToFavorites}
-                            className="flex-1 py-2 px-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-xs font-bold text-gray-600 dark:text-gray-300 hover:bg-white dark:hover:bg-gray-600 transition-all flex items-center justify-center gap-2"
+                            className="flex-1 py-2 px-3 bg-gray-700 border border-gray-600 rounded-lg text-xs font-bold text-gray-300 hover:bg-gray-600 transition-all flex items-center justify-center gap-2"
                         >
                             <Plus size={14} /> Зберегти колір
                         </button>
                     </div>
                 </div>
 
-                <div className="h-px bg-gray-100 dark:bg-gray-700"></div>
+                <div className="h-px bg-gray-700"></div>
 
                 {/* Standard Inputs */}
                 <div>
-                    <label className="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1.5 uppercase">Назва</label>
+                    <label className="block text-xs font-bold text-gray-400 mb-1.5 uppercase">Назва</label>
                     <input
                         type="text"
-                        className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-all"
+                        className="w-full px-3 py-2 border border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 text-sm bg-gray-700 text-white transition-all"
                         value={formData.name}
                         onChange={(e) => handleChange('name', e.target.value)}
                         placeholder="Назва..."
@@ -296,16 +296,16 @@ export function PropertiesPanel({ modeler, statuses = [] }: PropertiesPanelProps
                 </div>
 
                 <div>
-                    <label className="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1.5 uppercase">Опис</label>
+                    <label className="block text-xs font-bold text-gray-400 mb-1.5 uppercase">Опис</label>
                     <textarea
-                        className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 text-sm h-24 resize-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-all"
+                        className="w-full px-3 py-2 border border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 text-sm h-24 resize-none bg-gray-700 text-white transition-all"
                         value={formData.documentation}
                         onChange={(e) => handleChange('documentation', e.target.value)}
                         placeholder="Опис завдання..."
                     />
                 </div>
 
-                <div className="h-px bg-gray-100 dark:bg-gray-700"></div>
+                <div className="h-px bg-gray-700"></div>
 
                 <div className="space-y-4">
                     <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Notion Інтеграція</h3>
@@ -313,7 +313,7 @@ export function PropertiesPanel({ modeler, statuses = [] }: PropertiesPanelProps
                         <div>
                             <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1">Статус</label>
                             <select
-                                className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                className="w-full px-3 py-2 border border-gray-600 rounded-lg text-sm bg-gray-700 text-white"
                                 value={formData.notionStatus}
                                 onChange={(e) => handleChange('notionStatus', e.target.value)}
                             >
@@ -325,7 +325,7 @@ export function PropertiesPanel({ modeler, statuses = [] }: PropertiesPanelProps
                             <div>
                                 <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1">Пріоритет</label>
                                 <select
-                                    className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                    className="w-full px-3 py-2 border border-gray-600 rounded-lg text-sm bg-gray-700 text-white"
                                     value={formData.notionPriority}
                                     onChange={(e) => handleChange('notionPriority', e.target.value)}
                                 >
@@ -339,7 +339,7 @@ export function PropertiesPanel({ modeler, statuses = [] }: PropertiesPanelProps
                                 <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1">Дата</label>
                                 <input
                                     type="date"
-                                    className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                    className="w-full px-3 py-2 border border-gray-600 rounded-lg text-sm bg-gray-700 text-white"
                                     value={formData.notionDueDate}
                                     onChange={(e) => handleChange('notionDueDate', e.target.value)}
                                 />
@@ -349,7 +349,7 @@ export function PropertiesPanel({ modeler, statuses = [] }: PropertiesPanelProps
                             <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1">Виконавець</label>
                             <input
                                 type="text"
-                                className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                className="w-full px-3 py-2 border border-gray-600 rounded-lg text-sm bg-gray-700 text-white"
                                 value={formData.notionAssignee}
                                 onChange={(e) => handleChange('notionAssignee', e.target.value)}
                                 placeholder="Ім'я..."
@@ -363,7 +363,7 @@ export function PropertiesPanel({ modeler, statuses = [] }: PropertiesPanelProps
                         <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1">Логіка переходу</label>
                         <input
                             type="text"
-                            className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-700"
+                            className="w-full px-3 py-2 border border-gray-600 rounded-lg text-sm bg-gray-700 text-white"
                             value={formData.gatewayCondition}
                             onChange={(e) => handleChange('gatewayCondition', e.target.value)}
                             placeholder="Наприклад: yes/no"
